@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from rest_framework.generics import get_object_or_404
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from user.models import User
-from user.serializers import UserRegisterSerializer, UserLoginSerializer
 
+from user.models import User
+from user.serializers import UserRegisterSerializer, UserLoginSerializer, UserUpdateSerializer
 
 
 class RegisterPhoneNumberAPI(APIView):
@@ -41,11 +42,41 @@ class UserLoginAPI(APIView):
         if user:
                 if request.data['code'] == '12345':
                     serializer = self.serializer_class(instance=user)
-                    return Response(serializer.data, status=status.HTTP_200_OK)
+                    token = User.get_token_for_user(user)
+                    # print(token)
+                    # serializer.data
+                    data = serializer.data
+                    data['token'] = token
+                    print(data)
+                    return Response(data, status=status.HTTP_200_OK)
                 return Response({'message':'your verify code is in valid!'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message':'user not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
+class ProfileUpdateAPI(APIView):
+    """
+    in this API user can send requests if user login and his/her jwt token is valid:
+     1.get user info
+     2. update user info (username, phone_number,first_name,last_name,avatar)
+     in this API we used from access_token for fetch user form database
+    """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserUpdateSerializer
+
+    def get(self, request):
+        user= User.get_user_info_by_token(request.auth)
+        serializer = self.serializer_class(instance=user)
+        return Response(serializer.data)
+
+
+
+    def put(self, request):
+        user = User.get_user_info_by_token(request.auth)
+        serializer = self.serializer_class(instance=user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

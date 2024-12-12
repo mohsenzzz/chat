@@ -13,3 +13,9 @@ class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('phone_number','code')
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model =User
+        fields = ('username','first_name','last_name','phone_number','avatar')
