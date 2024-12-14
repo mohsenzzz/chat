@@ -1,3 +1,5 @@
+import os
+from config import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
@@ -28,3 +30,10 @@ class User(AbstractUser):
         user_id = access_token['user_id']
         user = User.objects.filter(id=user_id).first()
         return user
+
+    @classmethod
+    def remove_pre_avatar(cls, user):
+
+        image_path = os.path.join(settings.MEDIA_ROOT, str(user.avatar))
+        if os.path.exists(image_path):
+            os.remove(image_path)

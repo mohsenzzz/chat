@@ -69,11 +69,14 @@ class ProfileUpdateAPI(APIView):
         return Response(serializer.data)
 
 
-
     def put(self, request):
+        # get user info by access token we can get user info by user_id also but user must
+        #send id in request
         user = User.get_user_info_by_token(request.auth)
         serializer = self.serializer_class(instance=user, data=request.data)
         if serializer.is_valid():
+            #remove previous user avatar
+            User.remove_pre_avatar(user)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -81,9 +84,3 @@ class ProfileUpdateAPI(APIView):
 
 
 
-# class UserAuthenticationAPI(APIView):
-#
-#     def post(self, request):
-#         user = get_object_or_404(User, phone_number=request.data['phone_number'])
-#         if not user:
-#             User.objects.create(phone_number=request.data['phone_number'])
