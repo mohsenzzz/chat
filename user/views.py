@@ -1,14 +1,11 @@
-from django.shortcuts import render
-from rest_framework.generics import get_object_or_404
-from rest_framework import generics
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-
+from rest_framework import status, filters
 
 from user.models import User
-from user.serializers import UserRegisterSerializer, UserLoginSerializer, UserUpdateSerializer
+from user.serializers import UserRegisterSerializer, UserLoginSerializer, UserUpdateSerializer, UserListSerializer
 
 
 class RegisterPhoneNumberAPI(APIView):
@@ -84,3 +81,9 @@ class ProfileUpdateAPI(APIView):
 
 
 
+class UserListAPI(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserListSerializer
+    permission_classes = (IsAuthenticated,)
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username','phone_number']
