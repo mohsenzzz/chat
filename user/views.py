@@ -38,6 +38,7 @@ class UserLoginAPI(APIView):
     serializer_class = UserLoginSerializer
 
     def post(self, request):
+        print(type(request.data))
         user = User.objects.filter(phone_number=request.data['phone_number']).first()
         if user:
                 if request.data['code'] == '12345':
