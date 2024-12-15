@@ -7,4 +7,5 @@ urlpatterns=[
     path('login/',views.UserLoginAPI.as_view(),name='login'),
     path('profile/',views.ProfileUpdateAPI.as_view(),name='profile'),
     path('profile/update',views.ProfileUpdateAPI.as_view(),name='update-profile'),
+    path('list',views.UserListAPI.as_view(),name='user-list'),
 ]
