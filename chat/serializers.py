@@ -16,4 +16,12 @@ class ChatSerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ['chat','sender','message']
+        fields = ['chat','sender','content','created_at']
+
+
+class ChatUserSerializer(serializers.ModelSerializer):
+    # user=UserSerializer(many=True)
+    messages=MessageSerializer(many=True)
+    class Meta:
+        model = Chat
+        fields = ('token','user','messages')

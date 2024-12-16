@@ -8,7 +8,7 @@ from user.models import User
 class Chat(models.Model):
     token=models.CharField(max_length=100,unique=True)
     user = models.ManyToManyField(User)
-
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return f'{self.token}' or "unknown"
 
