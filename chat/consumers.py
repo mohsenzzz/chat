@@ -1,14 +1,8 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
-from asgiref.sync import sync_to_async
-from rest_framework import status
-from rest_framework.response import Response
 
-from user.serializers import UserListSerializer
 from .models import Chat, Message
-from .serializers import ChatSerializer
 
-from rest_framework.permissions import IsAuthenticated
 from channels.db import database_sync_to_async
 
 class ChatConsumer(AsyncWebsocketConsumer):
