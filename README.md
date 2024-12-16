@@ -8,7 +8,7 @@ login user:           url: localhost:8000/user/login/            data: { "phone_
 
 user profile:         url: localhost:8000/user/profile/
 
-chat     url: localhost:8000/user/chat/
+chat     url: localhost:8000/ws/chat/<token-chat>?token=<jwt-token>
 
 users list :        url: localhost:8000/user/list?search=
 
