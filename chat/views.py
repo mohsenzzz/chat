@@ -18,6 +18,10 @@ from chat.serializers import ChatSerializer, ChatUserSerializer
 
 
 class UserChatListView(ListAPIView):
+    """
+    list all users that user chats with them
+    user can search users by username or phone_number
+    """
     queryset = Chat.objects.all()
     serializer_class = ChatSerializer
     permission_classes = (IsAuthenticated,)
@@ -33,6 +37,9 @@ class UserChatListView(ListAPIView):
 
 
 class UserChatDetailView(ListAPIView):
+    """
+    get chat detail by chat token
+    """
     queryset = Chat.objects.all()
     serializer_class = ChatUserSerializer
     permission_classes = (IsAuthenticated,)
