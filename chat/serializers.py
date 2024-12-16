@@ -6,7 +6,7 @@ from .models import Chat,Message
 
 
 class ChatSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=True)
+    user = UserListSerializer(many=True)
     class Meta:
         model = Chat
         fields = ('token','user')

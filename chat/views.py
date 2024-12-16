@@ -1,22 +1,36 @@
+from django.db.models import Q
 from django.shortcuts import render
+from rest_framework import filters
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
+
+
 
 from chat.models import Chat
 from chat.serializers import ChatSerializer, ChatUserSerializer
 
 
+
 # Create your views here.
+
+
+
 
 
 class UserChatListView(ListAPIView):
     queryset = Chat.objects.all()
     serializer_class = ChatSerializer
     permission_classes = (IsAuthenticated,)
-    ordering_fields = ['created_at', 'username']
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['user__username','user__phone_number']
+    ordering_fields = ['created_at']
     def get_queryset(self):
         qs = super().get_queryset()
-        return qs.filter(user=self.request.user)
+        print(self.request.user.id)
+
+
+        return qs.filter(user__id=self.request.user.id)
+
 
 class UserChatDetailView(ListAPIView):
     queryset = Chat.objects.all()
