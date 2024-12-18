@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-g@vl1fv9%=61_#q^28ejdlxl$cn-518+2n3-v*6t4bi8!*r3k="
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -83,7 +83,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("192.168.56.16", 6379)],
+            "hosts": [(os.environ.get("REDIS_HOST"), 6379)],
         },
     },
 }
@@ -95,10 +95,11 @@ CHANNEL_LAYERS = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": DB_NAME,
-        "USER": DB_USER,
-        "PASSWORD": DB_PASS,
-        "HOST": DB_HOST,
+        "NAME": os.environ.get("DB_NAME",''),
+        "USER": os.environ.get("DB_USER",''),
+        "PASSWORD": os.environ.get("DB_PASS",''),
+        "HOST": os.environ.get("DB_HOST",''),
+        "PORT": os.environ.get("DB_PORT",''),
     }
 }
 
